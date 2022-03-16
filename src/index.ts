@@ -57,9 +57,10 @@ function judgeFileName(url: string) {
   const arr = url.split('/');
   return arr[arr.length - 1];
 }
-
 const requestUrl =
-  'https://www.dingshiyi.top:9002/article/get_articles?limit=100&page=1&type=1';
+  'http://live-2.preview.funnymamu.com/user/virtual-figure-prop/get-all-resource';
+// const requestUrl =
+//   'http://live-test5.funnymamu.com/user/virtual-figure-prop/get-all-resource';
 
 /**
  * 异步下载资源（并行）
@@ -71,12 +72,12 @@ function downloadAsync() {
       const { data } = JSON.parse(body);
       console.log(data.articles, '======');
 
-      const uniqueData = Array.from(new Set(data.articles)); // 去重
+      const uniqueData = Array.from(new Set(data)); // 去重
       console.log(`一共：${uniqueData.length}个文件`);
       uniqueData.forEach(async (item, index) => {
-        const filename = judgeFileName(item.faceUrl);
+        const filename = judgeFileName(item);
         console.log(`第${index + 1}个文件：${filename}开始下载`);
-        await downloadFile(item.faceUrl, filename, index, function (v) {
+        await downloadFile(item, filename, index, function (v) {
           console.log(`第${v + 1}个文件：${filename}下载完毕`);
         });
       });

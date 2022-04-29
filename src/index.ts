@@ -4,6 +4,9 @@ import request from 'request';
 // const fs = require('fs');
 // const path = require('path');
 // const request = require('request');
+// import { res1 } from './data';
+
+// console.log(res1);
 
 // 文件夹目录
 const dirPath = path.resolve(__dirname, '../file');
@@ -57,10 +60,7 @@ function judgeFileName(url: string) {
   const arr = url.split('/');
   return arr[arr.length - 1];
 }
-const requestUrl =
-  'http://live-2.preview.funnymamu.com/user/virtual-figure-prop/get-all-resource';
-// const requestUrl =
-//   'http://live-test5.funnymamu.com/user/virtual-figure-prop/get-all-resource';
+const requestUrl = 'http://127.0.0.1:3300/qiniu/all_list';
 
 /**
  * 异步下载资源（并行）
@@ -70,9 +70,15 @@ function downloadAsync() {
   request(requestUrl, (err, response, body) => {
     if (!err) {
       const { data } = JSON.parse(body);
-      console.log(data.articles, '======');
-
-      const uniqueData = Array.from(new Set(data)); // 去重
+      // console.log(data, '======');
+      const res = data.filter(
+        (v) => v.mimeType !== 'application/x-sql' && v.mimeType !== 'image/webp'
+      );
+      const res1 = res.map((v) => 'https://img.cdn.hsslive.cn/' + v.key);
+      res1.length = res.length - 1;
+      console.log(res1, 33333);
+      // return;
+      const uniqueData = Array.from(new Set(res1)); // 去重
       console.log(`一共：${uniqueData.length}个文件`);
       uniqueData.forEach(async (item, index) => {
         const filename = judgeFileName(item);

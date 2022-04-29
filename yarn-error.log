@@ -1,0 +1,75 @@
+Arguments: 
+  /Users/huangshuisheng/.nvm/versions/node/v14.19.1/bin/node /Users/huangshuisheng/.nvm/versions/node/v14.19.1/bin/yarn
+
+PATH: 
+  /Users/huangshuisheng/.nvm/versions/node/v14.19.1/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/huangshuisheng/.nvm/versions/node/v14.19.1/bin:/opt/homebrew/bin:/opt/homebrew/sbin
+
+Yarn version: 
+  1.22.18
+
+Node version: 
+  14.19.1
+
+Platform: 
+  darwin x64
+
+Trace: 
+  Error: https://registry.npmjs.org/gulp: tunneling socket could not be established, statusCode=405
+      at ClientRequest.onConnect (/Users/huangshuisheng/.nvm/versions/node/v14.19.1/lib/node_modules/yarn/lib/cli.js:152358:19)
+      at Object.onceWrapper (events.js:520:26)
+      at ClientRequest.emit (events.js:400:28)
+      at Socket.socketOnData (_http_client.js:553:11)
+      at Socket.emit (events.js:400:28)
+      at addChunk (internal/streams/readable.js:293:12)
+      at readableAddChunk (internal/streams/readable.js:267:9)
+      at Socket.Readable.push (internal/streams/readable.js:206:10)
+      at TCP.onStreamRead (internal/stream_base_commons.js:188:23)
+
+npm manifest: 
+  {
+    "name": "mini-img",
+    "description": "压缩图片",
+    "repository": {},
+    "license": "ISC",
+    "scripts": {
+      "download": "ts-node -T ./src/index.ts",
+      "lint": "eslint --config ./.eslintrc.js . --ext .js,.ts",
+      "lint:fix": "eslint --config ./.eslintrc.js . --ext .js,.ts --fix",
+      "mini": "gulp -f ./build-tools/gulpfile.ts",
+      "prettier": "prettier --write ."
+    },
+    "dependencies": {
+      "gulp": "^4.0.2",
+      "gulp-babel": "^8.0.0",
+      "gulp-clean": "^0.4.0",
+      "gulp-imagemin": "^7.1.0",
+      "gulp-typescript": "^6.0.0-alpha.1",
+      "imagemin-pngquant": "^9.0.2",
+      "imagemin-webp": "^6.0.0",
+      "request": "^2.88.2"
+    },
+    "devDependencies": {
+      "@typescript-eslint/eslint-plugin": "^4.28.4",
+      "@typescript-eslint/parser": "^4.28.5",
+      "babel-loader": "^8.2.2",
+      "babel-plugin-import": "^1.13.3",
+      "chalk": "^4.1.1",
+      "eslint": "^7.31.0",
+      "eslint-config-airbnb-base": "^14.2.1",
+      "eslint-config-prettier": "^8.3.0",
+      "eslint-loader": "^4.0.2",
+      "eslint-plugin-import": "^2.23.4",
+      "eslint-plugin-prettier": "^3.4.0",
+      "node-emoji": "^1.10.0",
+      "prettier": "^2.6.0",
+      "ts-loader": "^9.2.3",
+      "ts-node": "^10.3.0",
+      "typescript": "^4.3.5"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

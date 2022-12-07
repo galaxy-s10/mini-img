@@ -4,12 +4,10 @@ import request from 'request';
 // const fs = require('fs');
 // const path = require('path');
 // const request = require('request');
-// import { res1 } from './data';
-
-// console.log(res1);
+// import { ajaxdata } from './data';
 
 // 文件夹目录
-const dirPath = path.resolve(__dirname, '../file');
+const dirPath = path.resolve(__dirname, '../download');
 
 /**
  * 清空某个文件夹下的文件
@@ -54,13 +52,19 @@ function downloadFile(uri, filename, index, callback) {
 
 /**
  * 获取资源名
- * 如：https://img.cdn.hsslive.cn/1613141138717Billd.jpg ===> 613141138717Billd.jpg
+ * 如：https://resource.hsslive.cn/1613141138717Billd.jpg ===> 613141138717Billd.jpg
  */
 function judgeFileName(url: string) {
   const arr = url.split('/');
   return arr[arr.length - 1];
 }
-const requestUrl = 'http://127.0.0.1:3300/qiniu/all_list';
+
+// const requestUrl = 'http://127.0.0.1:3300/qiniu/all_list';
+const requestUrl =
+  'https://api.hsslive.cn/prodapi/qiniu_data/list?nowPage=1&pageSize=10&orderName=created_at&orderBy=desc&prefix=image%2F&bucket=hssblog';
+
+let num = 0;
+let total = 0;
 
 /**
  * 异步下载资源（并行）
@@ -70,21 +74,18 @@ function downloadAsync() {
   request(requestUrl, (err, response, body) => {
     if (!err) {
       const { data } = JSON.parse(body);
-      // console.log(data, '======');
-      const res = data.filter(
-        (v) => v.mimeType !== 'application/x-sql' && v.mimeType !== 'image/webp'
+      const imglist = data.rows.map(
+        (v) => `https://resource.hsslive.cn/${v.qiniu_key}`
       );
-      const res1 = res.map((v) => 'https://img.cdn.hsslive.cn/' + v.key);
-      res1.length = res.length - 1;
-      console.log(res1, 33333);
-      // return;
-      const uniqueData = Array.from(new Set(res1)); // 去重
-      console.log(`一共：${uniqueData.length}个文件`);
-      uniqueData.forEach(async (item, index) => {
+      total = imglist.length;
+      imglist.forEach(async (item, index) => {
         const filename = judgeFileName(item);
         console.log(`第${index + 1}个文件：${filename}开始下载`);
         await downloadFile(item, filename, index, function (v) {
-          console.log(`第${v + 1}个文件：${filename}下载完毕`);
+          num += 1;
+          console.log(
+            `第${v + 1}个文件：${filename}下载完毕，进度${num}/${total}`
+          );
         });
       });
     }
@@ -94,22 +95,28 @@ function downloadAsync() {
 /**
  * 同步下载资源（串行）
  */
-// function downloadSync() {
-//   console.log('同步下载资源（串行）');
-//   request(requestUrl, async (err, response, body) => {
-//     if (!err) {
-//       const { data } = JSON.parse(body);
-//       const uniqueData = Array.from(new Set(data.articles)); // 去重
-//       console.log(`一共：${uniqueData.length}个文件`);
-//       for (let i = 0; i < uniqueData.length; i++) {
-//         const filename = judgeFileName(uniqueData[i]);
-//         console.log(`第${i + 1}个文件：${filename}开始下载`);
-//         await downloadFile(uniqueData[i], filename, i, function (v) {
-//           console.log(`第${v + 1}个文件：${filename}下载完毕`);
-//         });
-//       }
-//     }
-//   });
-// }
+function downloadSync() {
+  console.log('同步下载资源（串行）');
+  request(requestUrl, async (err, response, body) => {
+    if (!err) {
+      const { data } = JSON.parse(body);
+      const imglist = data.rows.map(
+        (v) => `https://resource.hsslive.cn/${v.qiniu_key}`
+      );
+      total = imglist.length;
+      for (let i = 0; i < imglist.length; i++) {
+        const filename = judgeFileName(imglist[i]);
+        console.log(`第${i + 1}个文件：${filename}开始下载`);
+        await downloadFile(imglist[i], filename, i, function (v) {
+          num += 1;
+          console.log(
+            `第${v + 1}个文件：${filename}下载完毕，进度${num}/${total}`
+          );
+        });
+      }
+    }
+  });
+}
 
 downloadAsync();
+// downloadSync();

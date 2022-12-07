@@ -26,14 +26,14 @@ gulp.task(
   'default',
   gulp.series('clean-mini', function mini() {
     return gulp
-      .src('webp/**/*', { cwd: '../' })
+      .src('file/**/*', { cwd: '../' })
       .pipe(
         imagemin([
-          gifsicle({ interlaced: true, optimizationLevel: 2 }), // 压缩gif
+          // gifsicle({ interlaced: true, optimizationLevel: 2 }), // 压缩gif
           mozjpeg({ quality: 50, progressive: true }), // 压缩jpg（有损/无损都有可能）
           optipng({ optimizationLevel: 7 }), // 压缩png（无损）范围：0-7
           imageminPngquant({ quality: [0.65, 0.9], speed: 4 }), // 压缩png(有损)
-          imageminWebp({ quality: 75 }), // 值越大代表质量越高，文件越大。范围：
+          imageminWebp({ quality: 75 }), // 值越大代表质量越高，文件越大。范围：0-100
         ])
       )
       .pipe(gulp.dest('../mini'));

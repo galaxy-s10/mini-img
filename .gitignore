@@ -1,7 +1,5 @@
 /mini/
 /file/
+/download/
 /node_modules/
-.vscode
 .DS_Store
-yarn.lock
-package-lock.json
